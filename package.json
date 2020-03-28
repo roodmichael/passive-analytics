@@ -1,0 +1,25 @@
+{
+  "name": "passive-analytics",
+  "version": "0.0.1",
+  "description": "A leightweight analytics framework for websites and applications.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roodmichael/passive-analytics.git"
+  },
+  "keywords": [
+    "analytics",
+    "event",
+    "tracking",
+    "javascript"
+  ],
+  "author": "Mike Rood",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/roodmichael/passive-analytics/issues"
+  },
+  "homepage": "https://github.com/roodmichael/passive-analytics#readme"
+}
