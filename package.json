@@ -2,9 +2,12 @@
   "name": "passive-analytics",
   "version": "0.0.1",
   "description": "A leightweight analytics framework for websites and applications.",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "private": true,
   "scripts": {
-    "test": "test"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:development": "webpack --env dev",
+    "build:production": "webpack --env prod"
   },
   "repository": {
     "type": "git",
@@ -21,5 +24,10 @@
   "bugs": {
     "url": "https://github.com/roodmichael/passive-analytics/issues"
   },
-  "homepage": "https://github.com/roodmichael/passive-analytics#readme"
+  "homepage": "https://github.com/roodmichael/passive-analytics#readme",
+  "devDependencies": {
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {}
 }
