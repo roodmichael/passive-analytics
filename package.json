@@ -2,12 +2,13 @@
   "name": "passive-analytics",
   "version": "0.0.1",
   "description": "A leightweight analytics framework for websites and applications.",
-  "main": "dist/index.js",
+  "main": "build/index.js",
   "private": true,
   "scripts": {
     "lint": "tslint -c tslint.json src/**/*.ts",
     "test": "jest",
-    "build": "npm run lint && npm run test && tsc"
+    "build": "npm run lint && npm run test && tsc",
+    "build:only": "tsc"
   },
   "repository": {
     "type": "git",

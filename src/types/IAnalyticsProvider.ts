@@ -1,15 +1,4 @@
-export type IEvent = {
-    eventId: string;
-    name: string;
-    attribute: string;
-    metric: string;
-    session: string;
-};
-
-export type IRecordEvent = {
-    timestamp: number;
-    event: IEvent;
-};
+import { IRecordEvent } from './';
 
 export interface IAnalyticsProvider {
     // name of the provider

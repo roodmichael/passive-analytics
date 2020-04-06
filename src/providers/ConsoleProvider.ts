@@ -25,6 +25,9 @@ export class ConsoleProvider implements IAnalyticsProvider {
      * record event
      */
     public async record(event: IRecordEvent) {
+        /* tslint:disable-next-line no-console */
+        console.log(event);
+
         return true;
     }
 }
