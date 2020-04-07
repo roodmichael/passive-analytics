@@ -2,12 +2,12 @@
   "name": "passive-analytics",
   "version": "0.0.1",
   "description": "A leightweight analytics framework for websites and applications.",
-  "main": "dist/index.js",
+  "main": "build/index.js",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:development": "webpack --env dev",
-    "build:production": "webpack --env prod"
+    "lint": "tslint -c tslint.json src/**/*.ts",
+    "test": "jest",
+    "build": "npm run lint && npm run test && tsc"
   },
   "repository": {
     "type": "git",
@@ -15,9 +15,7 @@
   },
   "keywords": [
     "analytics",
-    "event",
-    "tracking",
-    "javascript"
+    "typescript"
   ],
   "author": "Mike Rood",
   "license": "MIT",
@@ -26,8 +24,14 @@
   },
   "homepage": "https://github.com/roodmichael/passive-analytics#readme",
   "devDependencies": {
-    "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11"
+    "@types/jest": "^25.1.4",
+    "@types/uuid": "^7.0.2",
+    "jest": "^25.2.3",
+    "ts-jest": "^25.2.1",
+    "tslint": "^6.1.0",
+    "typescript": "^3.8.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "uuid": "^7.0.2"
+  }
 }
