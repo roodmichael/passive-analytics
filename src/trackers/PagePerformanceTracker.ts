@@ -1,6 +1,6 @@
 import { IAnalyticsTracker, IPagePerformanceTrackerConfig, IRecordEvent, IEvent } from '../types';
 
-const DEFAULT_CONFIG = {
+export const DEFAULT_PAGE_PERFORMANCE_TRACKER_CONFIG = {
     entryTypeNames: ['paint', 'resource', 'longtask']
 };
 
@@ -12,9 +12,8 @@ export class PagePerformanceTracker implements IAnalyticsTracker {
     private _provider;
 
     constructor(provider) {
-        this._config = DEFAULT_CONFIG;
+        this._config = DEFAULT_PAGE_PERFORMANCE_TRACKER_CONFIG;
         this._provider = provider;
-        this.track();
     }
 
     /**
@@ -33,6 +32,13 @@ export class PagePerformanceTracker implements IAnalyticsTracker {
      */
     public getTrackerName(): string {
         return PagePerformanceTracker.trackerName;
+    }
+
+    /**
+     * starts the tracker
+     */
+    public start(): void {
+        this.track();
     }
 
     /**

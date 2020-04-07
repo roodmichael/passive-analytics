@@ -12,4 +12,8 @@ export class PageViewTracker implements IAnalyticsTracker {
     public getTrackerName(): string {
         return PageViewTracker.trackerName;
     }
+
+    start(): void {
+        // TODO
+    }
 };
