@@ -6,7 +6,6 @@ import { PageViewTracker } from '../trackers';
 import { IAnalyticsConfig, IAnalyticsProvider, IAnalyticsTracker } from '../types';
 
 const INITIAL_CONFIGURATION: IAnalyticsConfig = {
-    visit_id: 'visit123',
     metadata: {
         'custom:fileno': 'fileno123',
         'Username': 'test@email.com'
