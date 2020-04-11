@@ -1,4 +1,4 @@
-import { IAnalyticsConfig, IAnalyticsProvider, IAnalyticsTracker } from './types';
+import { IAnalyticsConfig, IAnalyticsProvider, IAnalyticsTracker, IEvent } from './types';
 
 export default class Analytics {
 
@@ -50,5 +50,28 @@ export default class Analytics {
      */
     public addTracker(tracker: IAnalyticsTracker) {
         this._trackers.push(tracker);
+    }
+
+    /**
+     * start analytics collection
+     */
+    public start(): void {
+        const event: IEvent = {
+            tracker: '',
+            type: 'analytics',
+            name: 'initialize',
+            value: '',
+            detail: this._config.metadata || {}
+        };
+        this._provider.record(event);
+
+        this.startTrackers();
+    }
+
+    /**
+     * start trackers
+     */
+    private startTrackers(): void {
+        this._trackers.forEach((tracker) => tracker.start());
     }
 }

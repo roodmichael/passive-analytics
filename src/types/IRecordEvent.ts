@@ -7,6 +7,7 @@ export type IEvent = {
 };
 
 export type IRecordEvent = {
+    session: string;
     timestamp: number;
     event: IEvent;
 };

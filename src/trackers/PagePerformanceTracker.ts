@@ -63,11 +63,7 @@ export class PagePerformanceTracker implements IAnalyticsTracker {
                     event.value = entry.duration;
                 }
 
-                const recordEvent: IRecordEvent = {
-                    timestamp: Date.now(),
-                    event
-                };
-                this._provider.record(recordEvent);
+                this._provider.record(event);
             });
         });
         observer.observe({ entryTypes: this._config.entryTypeNames });
