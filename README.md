@@ -1,5 +1,6 @@
 # Passive Analytics
-> A leightweight pluggable framework for collecting web application usage.
+
+> A lightweight pluggable framework for collecting web application usage.
 
 Passive Analytics is a personal project to explore passive metrics collection patterns that do not pollute the codebase with metrics related code. Because this is a side project, I make no promises and do not recommend using it for any serious purposes.
 
@@ -26,7 +27,7 @@ npm run build
 ## Release History
 
 * 0.0.1
-    * Work in progress
+  * Work in progress
 
 ## Meta
 
