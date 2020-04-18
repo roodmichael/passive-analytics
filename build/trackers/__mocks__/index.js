@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MOCK_PERFORMANCE_ENTRIES = [
-    { name: 'first-paint', entryType: 'paint', startTime: 0 },
-    { name: 'https://some.url', entryType: 'resource', duration: 0 }
+    { name: 'first-paint', entryType: 'paint', startTime: 0, toJSON: function () { return {}; } },
+    { name: 'https://some.url', entryType: 'resource', duration: 0, toJSON: function () { return {}; } }
 ];
 var MockPerformanceObserver = /** @class */ (function () {
     function MockPerformanceObserver(callback) {

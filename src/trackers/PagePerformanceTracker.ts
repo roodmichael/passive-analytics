@@ -54,7 +54,7 @@ export class PagePerformanceTracker implements IAnalyticsTracker {
                     type: entry.entryType,
                     name: entry.name,
                     value: '',
-                    detail: entry
+                    detail: entry.toJSON()
                 };
 
                 if (entry.entryType === 'paint') {

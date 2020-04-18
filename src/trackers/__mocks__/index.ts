@@ -1,6 +1,6 @@
 export const MOCK_PERFORMANCE_ENTRIES = [
-    { name: 'first-paint', entryType: 'paint', startTime: 0 },
-    { name: 'https://some.url', entryType: 'resource', duration: 0 }
+    { name: 'first-paint', entryType: 'paint', startTime: 0, toJSON: function() { return {} }},
+    { name: 'https://some.url', entryType: 'resource', duration: 0, toJSON: function() { return {} }}
 ];
 
 export class MockPerformanceObserver {
