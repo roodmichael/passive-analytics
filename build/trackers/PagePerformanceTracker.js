@@ -43,7 +43,7 @@ var PagePerformanceTracker = /** @class */ (function () {
                     type: entry.entryType,
                     name: entry.name,
                     value: '',
-                    detail: entry
+                    detail: entry.toJSON()
                 };
                 if (entry.entryType === 'paint') {
                     event.value = entry.startTime;
