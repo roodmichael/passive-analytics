@@ -53,20 +53,20 @@ The following click event would be produced from the above element. Note the val
 
 ```json
 {
-  event: {
-    tracker: "Click",
-    type: "click",
-    name: "button[@id="submit"],
-    value: "contact-form:submit:button[@id='submit']",
-    detail: {
-      className: "",
-      id: "submit",
-      tagName: "button",
-      textContent: "Submit"
+  "event": {
+    "tracker": "Click",
+    "type": "click",
+    "name": "button[@id='submit']",
+    "value": "contact-form:submit:button[@id='submit']",
+    "detail": {
+      "className": "",
+      "id": "submit",
+      "tagName": "button",
+      "textContent": "Submit"
     }
   },
-  session: 'uuid',
-  timestamp: 1587310932364
+  "session": "uuid",
+  "timestamp": 1587310932364
 }
 ```
 
