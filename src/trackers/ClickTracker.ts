@@ -1,3 +1,5 @@
+import { buildLeafNodeIdentifier, buildConcatenatedIdentifier } from '../lib';
+
 import { IAnalyticsTracker, IEvent } from '../types';
 
 export class ClickTracker implements IAnalyticsTracker {
@@ -21,35 +23,9 @@ export class ClickTracker implements IAnalyticsTracker {
         this.untrack();
     }
 
-    private buildLeafNodeIdentifier(element: Element): string {
-        const tagName = element.tagName.toLowerCase();
-        if (element.id) {
-            return `${tagName}[@id="${element.id}"]`;
-        }
-
-        if (element.className) {
-            return `${tagName}[@class="${element.className}"]`;
-        }
-
-        if (element.textContent) {
-            return `${tagName}[text()="${element.textContent}"]`;
-        }
-
-        return tagName;
-    }
-
-    private buildConcatenatedIdentifier(element: Element): string {
-        if (element === document.body) {
-            return '';
-        }
-
-        const identifier = element.id ? element.id + ':' : '';
-        return this.buildConcatenatedIdentifier(element.parentElement) + identifier;
-    }
-
     private trackExecute(clickTarget: Element): void {
-        const name = this.buildLeafNodeIdentifier(clickTarget);
-        const value = this.buildConcatenatedIdentifier(clickTarget) + name;
+        const name = buildLeafNodeIdentifier(clickTarget);
+        const value = buildConcatenatedIdentifier(clickTarget);
         const event: IEvent = {
             tracker: this.getTrackerName(),
             type: 'click',
