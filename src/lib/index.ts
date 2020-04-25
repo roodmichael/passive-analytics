@@ -1,1 +1,1 @@
-export * from './Indentifiers';
+export * from './Identifiers';

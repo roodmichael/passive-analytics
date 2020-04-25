@@ -1,4 +1,4 @@
-import { PagePerformanceTracker, DEFAULT_PAGE_PERFORMANCE_TRACKER_CONFIG } from '../';
+import { PagePerformanceTracker, defaultPagePerformanceTrackerConfig } from '../';
 import { ConsoleProvider } from '../../providers';
 import { MockPerformanceObserver, MOCK_PERFORMANCE_ENTRIES } from '../__mocks__';
 
@@ -28,8 +28,8 @@ describe('Page Performance Tracker >', () => {
         test('Performance Observer is called with default entry types', () => {
             const initialConfiguration = tracker.configure();
             tracker.start();
-            expect(initialConfiguration).toStrictEqual(DEFAULT_PAGE_PERFORMANCE_TRACKER_CONFIG );
-            expect(trackerSpy).toHaveBeenCalledWith({ entryTypes: DEFAULT_PAGE_PERFORMANCE_TRACKER_CONFIG.entryTypeNames });
+            expect(initialConfiguration).toStrictEqual(defaultPagePerformanceTrackerConfig);
+            expect(trackerSpy).toHaveBeenCalledWith({ entryTypes: defaultPagePerformanceTrackerConfig.entryTypeNames });
         });
         test('Performance Observer is called with custom entry types', () => {
             const initialEntryTypes = ['paint'];

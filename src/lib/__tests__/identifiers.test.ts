@@ -26,34 +26,35 @@ const setupDom = () => {
 };
 
 describe('LIBRARY Identifiers', () => {
+    const id = 'id';
     beforeAll(() => {
         setupDom();
     });
     describe('METHOD buildLeafNodeIdentifier', () => {
         test('builds correct ID leaf node identifier', () => {
             const initialTarget = window.document.getElementById('title');
-            const initialResult = buildLeafNodeIdentifier(initialTarget);
+            const initialResult = buildLeafNodeIdentifier(initialTarget, id);
             const expectedResult = 'span[@id="title"]';
     
             expect(initialResult).toEqual(expectedResult);
         });
         test('builds correct class leaf node identifier', () => {
             const initialTarget = window.document.getElementsByClassName('title')[0];
-            const initialResult = buildLeafNodeIdentifier(initialTarget);
+            const initialResult = buildLeafNodeIdentifier(initialTarget, id);
             const expectedResult = 'span[@class="title"]';
     
             expect(initialResult).toEqual(expectedResult);
         });
         test('builds correct text leaf node identifier', () => {
             const initialTarget = window.document.getElementsByTagName('h3')[0];
-            const initialResult = buildLeafNodeIdentifier(initialTarget);
+            const initialResult = buildLeafNodeIdentifier(initialTarget, id);
             const expectedResult = 'h3[text()="title"]';
     
             expect(initialResult).toEqual(expectedResult);
         });
         test('returns tag if no identifiable attributes', () => {
             const initialTarget = window.document.getElementsByTagName('p')[0];
-            const initialResult = buildLeafNodeIdentifier(initialTarget);
+            const initialResult = buildLeafNodeIdentifier(initialTarget, id);
             const expectedResult = 'p';
     
             expect(initialResult).toEqual(expectedResult);
@@ -62,14 +63,14 @@ describe('LIBRARY Identifiers', () => {
     describe('METHOD buildConcatenatedIdentifier', () => {
         test('returns empty if document body', () => {
             const initialTarget = window.document.body;
-            const initialResult = buildConcatenatedIdentifier(initialTarget);
+            const initialResult = buildConcatenatedIdentifier(initialTarget, id);
     
             expect(initialResult).toBeFalsy();
         });
         test('returns concatenated identifier for parent and child', () => {
             const initialTarget = window.document.getElementById('child');
-            const initialResult = buildConcatenatedIdentifier(initialTarget);
-            const expectedResult = 'parent:h2[@id="child"]';
+            const initialResult = buildConcatenatedIdentifier(initialTarget, id);
+            const expectedResult = `parent:h2[@${id}="child"]`;
 
             expect(initialResult).toEqual(expectedResult);
         });

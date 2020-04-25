@@ -1,14 +1,30 @@
-import { buildLeafNodeIdentifier, buildConcatenatedIdentifier } from '../lib';
+import { buildConcatenatedIdentifier } from '../lib';
 
-import { IAnalyticsTracker, IEvent } from '../types';
+import {
+    IAnalyticsProvider,
+    IAnalyticsTracker,
+    IAnalyticsElementTrackerConfig,
+    IEvent
+} from '../types';
+
+const defaultInputTrackerConfig: IAnalyticsElementTrackerConfig = {
+    idAttribute: 'id'
+};
 
 export class InputTracker implements IAnalyticsTracker {
     static trackerName: string = 'Input';
 
-    private _provider;
+    private _provider: IAnalyticsProvider;
+
+    private _config: IAnalyticsElementTrackerConfig;
 
     constructor(provider) {
         this._provider = provider;
+        this._config = defaultInputTrackerConfig;
+    }
+
+    public configure(config: IAnalyticsElementTrackerConfig) {
+        this._config = config;
     }
 
     public getTrackerName(): string {
@@ -24,7 +40,7 @@ export class InputTracker implements IAnalyticsTracker {
     }
 
     private trackExecute(target: HTMLInputElement): void {
-        const name = buildConcatenatedIdentifier(target);
+        const name = buildConcatenatedIdentifier(target, this._config.idAttribute);
         const event: IEvent = {
             tracker: this.getTrackerName(),
             type: 'onchange',
@@ -32,7 +48,7 @@ export class InputTracker implements IAnalyticsTracker {
             value: target.value,
             detail: {
                 className: target.className,
-                id: target.id,
+                id: target.getAttribute(this._config.idAttribute),
                 tagName: target.tagName
             }
         };
