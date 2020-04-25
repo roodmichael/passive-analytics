@@ -5,6 +5,10 @@ const setupDom = () => {
     const inputElement = window.document.createElement('input');
     inputElement.setAttribute('id', 'input-test');
     window.document.body.append(inputElement);
+
+    const customInputElement = window.document.createElement('input');
+    customInputElement.setAttribute('data-pa-id', 'custom-input-test');
+    window.document.body.append(customInputElement);
 };
 
 describe('Input Tracker >', () => {
@@ -34,5 +38,12 @@ describe('Input Tracker >', () => {
         tracker.start();
         window.document.getElementById('input-test').dispatchEvent(new window.Event('change', { bubbles: true }));
         expect(providerSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "input[@id=\"input-test\"]"}));
+    });
+    test('records onchange event to custom id element correctly', () => {
+        const initialConfiguration = { idAttribute: 'data-pa-id' };
+        tracker.configure(initialConfiguration);
+        tracker.start();
+        window.document.querySelector('input[data-pa-id="custom-input-test"]').dispatchEvent(new window.Event('change', { bubbles: true }));
+        expect(providerSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "input[@data-pa-id=\"custom-input-test\"]"}));
     });
 });

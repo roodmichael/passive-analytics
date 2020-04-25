@@ -6,6 +6,10 @@ const setupDom = () => {
     idElement.setAttribute('id', 'title');
     window.document.body.append(idElement);
 
+    const customIdElement = window.document.createElement('span');
+    idElement.setAttribute('data-pa-id', 'custom');
+    window.document.body.append(customIdElement);
+
     const classElement = window.document.createElement('span');
     classElement.setAttribute('class', 'title');
     window.document.body.append(classElement);
@@ -60,5 +64,12 @@ describe('Click Tracker >', () => {
         tracker.start();
         window.document.getElementsByTagName('p')[0].dispatchEvent(new window.Event('click', { bubbles: true }));
         expect(providerSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "p"}));
+    });
+    test('records click to custom dom id element correctly', () => {
+        const initialConfiguration = { idAttribute: 'data-pa-id' };
+        tracker.configure(initialConfiguration);
+        tracker.start();
+        window.document.querySelector('span[data-pa-id="custom"]').dispatchEvent(new window.Event('click', { bubbles: true }));
+        expect(providerSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "span[@data-pa-id=\"custom\"]"}));
     });
 });

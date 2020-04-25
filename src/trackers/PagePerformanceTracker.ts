@@ -1,18 +1,23 @@
-import { IAnalyticsTracker, IPagePerformanceTrackerConfig, IRecordEvent, IEvent } from '../types';
+import {
+    IAnalyticsProvider,
+    IAnalyticsTracker,
+    IPagePerformanceTrackerConfig,
+    IEvent
+} from '../types';
 
-export const DEFAULT_PAGE_PERFORMANCE_TRACKER_CONFIG = {
-    entryTypeNames: ['paint', 'resource', 'longtask']
+export const defaultPagePerformanceTrackerConfig: IPagePerformanceTrackerConfig = {
+    entryTypeNames: ['paint', 'resource']
 };
 
 export class PagePerformanceTracker implements IAnalyticsTracker {
     static trackerName: string = 'PagePerformance';
 
-    private _config;
+    private _provider: IAnalyticsProvider;
 
-    private _provider;
+    private _config: IPagePerformanceTrackerConfig;
 
     constructor(provider) {
-        this._config = DEFAULT_PAGE_PERFORMANCE_TRACKER_CONFIG;
+        this._config = defaultPagePerformanceTrackerConfig;
         this._provider = provider;
     }
 

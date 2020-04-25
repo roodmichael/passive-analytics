@@ -31,7 +31,7 @@ Issues I've seen with this pattern in production include:
 
 * Pollutes codebase with analytics logs and attributes
 * Attribute naming becomes inconsistent over time
-* [A] tags will need to actually be Javascript links if they also need to log an event
+* Anchor tags will need to actually be Javascript links if they also need to log an event
 * The analytics library needs to be mocked during unit tests
 
 Instead, this library proposes that a global click handler be running in the background that tracks clicks to any element (or whitelisted elements). Then builds an ID based on the ID attribute, a custom attribute, class, or some other identifying information. For example, the above toy example would become:
@@ -49,7 +49,7 @@ const ContactForm = () => (
 );
 ```
 
-The following click event would be produced from the above element. Note the value of the button click event includes "contact-form". Concatenating parent IDs allows us to namespace events for easier identification, especially when we have reusable components.
+The following click event would be produced from the above element. Note the value of the button click event includes "contact-form". Concatenating parent IDs allows us to namespace events for easier identification of reusable components.
 
 ```json
 {
@@ -70,13 +70,23 @@ The following click event would be produced from the above element. Note the val
 }
 ```
 
+## Features / Trackers
+
+The following trackers are available:
+
+* [Clicks](src/trackers/ClickTracker.ts) - Record clicks to any element on the page
+* [Errors](src/trackers/ErrorTracker.ts) - Records all Javascript errors
+* [Inputs](src/trackers/InputTracker.ts) - Record change events from input, textarea, and select elements
+* [Performance](src/trackers/PagePerformanceTracker.ts) - Record [paint](https://developer.mozilla.org/en-US/docs/Web/API/PerformancePaintTiming) and [resource](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceResourceTiming), events from the [Performance API](https://developer.mozilla.org/en-US/docs/Web/API/Performance)
+* [Page Views](src/trackers/PageViewTracker.ts) - Record pageviews using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History_API)
+
 ## Reasons Not to Use
 
 A few reasons why you might not want to use this library.
 
-* You require support.
-* This library, although configurable, assumes you want comprehensive analytics.
-* You do not have hooks into the front-end framework you are using.
+* You require support
+* You do not want a comprehensive analytics solution (This library, although configurable, assumes you want comprehensive analytics)
+* You do not have hooks into the front-end framework you are using
 
 ## Installation
 

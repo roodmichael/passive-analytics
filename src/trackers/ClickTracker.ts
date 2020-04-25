@@ -1,14 +1,30 @@
 import { buildLeafNodeIdentifier, buildConcatenatedIdentifier } from '../lib';
 
-import { IAnalyticsTracker, IEvent } from '../types';
+import {
+    IAnalyticsProvider,
+    IAnalyticsTracker,
+    IAnalyticsElementTrackerConfig,
+    IEvent
+} from '../types';
+
+const defaultClickTrackerConfig: IAnalyticsElementTrackerConfig = {
+    idAttribute: 'id'
+};
 
 export class ClickTracker implements IAnalyticsTracker {
     static trackerName: string = 'Click';
 
-    private _provider;
+    private _provider: IAnalyticsProvider;
+
+    private _config: IAnalyticsElementTrackerConfig;
 
     constructor(provider) {
         this._provider = provider;
+        this._config = defaultClickTrackerConfig;
+    }
+
+    public configure(config: IAnalyticsElementTrackerConfig) {
+        this._config = config;
     }
 
     public getTrackerName(): string {
@@ -24,8 +40,8 @@ export class ClickTracker implements IAnalyticsTracker {
     }
 
     private trackExecute(clickTarget: Element): void {
-        const name = buildLeafNodeIdentifier(clickTarget);
-        const value = buildConcatenatedIdentifier(clickTarget);
+        const name = buildLeafNodeIdentifier(clickTarget, this._config.idAttribute);
+        const value = buildConcatenatedIdentifier(clickTarget, this._config.idAttribute);
         const event: IEvent = {
             tracker: this.getTrackerName(),
             type: 'click',
@@ -33,7 +49,7 @@ export class ClickTracker implements IAnalyticsTracker {
             value,
             detail: {
                 className: clickTarget.className,
-                id: clickTarget.id,
+                id: clickTarget.getAttribute(this._config.idAttribute),
                 tagName: clickTarget.tagName,
                 textContent: clickTarget.textContent
             }
