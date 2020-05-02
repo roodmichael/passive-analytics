@@ -1,0 +1,196 @@
+<html>
+    <head>
+        <title>Passive Analytics: Demo Page</title>
+        <link rel="stylesheet" type="text/css" href="css/demo.css">
+        <link href="https://unpkg.com/98.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+        <script src="js/demo.js"></script>
+        <script src="js/pa.js"></script>
+    </head>
+    <body>
+        <aside id="navigation">
+            <ul id="tree-view" class="tree-view">
+              <li id="intro-item"><a href="#intro-section">Intro</a></li>
+              <li>Trackers</li>
+                <ul id="trackers-tree-view">
+                    <li id="page-performance-tracker-item"><a href="#page-performance-tracker-section">Page Performance Tracker</a></li>
+                    <li id="click-tracker-item"><a href="#click-tracker-section">Click Tracker</a></li>
+                    <li id="input-tracker-item"><a href="#input-tracker-section">Input Tracker</a></li>
+                    <li id="error-tracker-item"><a href="#error-tracker-section">Error Tracker</a></li>
+                    <li id="pageview-tracker-item"><a href="#pageview-tracker-section">Pageview Tracker</a></li>
+                </ul>
+            </ul>
+        </aside>
+        <main>
+            <header id="header">
+                <h3>Passive Analytics Demo Page</h3>
+            </header>
+            <article id="intro-section">
+                <h4>Intro</h4>
+                Passive analytics is a lightweight and pluggable analytics metrics collection framework. Events on this page are printed to the console. Open up your console to see events generated.
+            </article>
+            <article id="page-performance-tracker-section">
+                <h4>Page Performance Tracker</h4>
+                <p>Record <a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformancePaintTiming">paint</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceResourceTiming">resource</a>, events from the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Performance">Performance API</a>. Open console to see those events from this page load.
+                <div class="code-example">
+                    <span class="code-toggle" onclick="toggleCodeSection('page-performance-tracker-example')">Show/Hide event data</span>
+                    <pre id="page-performance-tracker-example" style="display: none;">
+<code>
+{
+    event: {
+        detail: {
+            duration: 0,
+            entryType: "paint",
+            name: "first-paint",
+            startTime: 255.75500000013562
+        },
+        name: "first-paint",
+        tracker: "PagePerformance",
+        type: "paint",
+        value: 255.75500000013562
+    },
+    session: "7efdab20-8c99-11ea-a26d-338b698aeaf3",
+    timestamp: 1588440147733
+}
+</code>
+                    </pre>
+                </div>
+            </article>
+            <article id="click-tracker-section">
+                <h4>Click Tracker</h4>
+                <p>The click tracker will emit an event on every user click. It will concatenate parent element ids to form a namespaced id of the element clicked:</p>
+                <button id="click-tracker-demo">Button with unique id</button>
+                <p>If the element clicked does not include an ID, a unique identifier will be built using css class, tag, and text content. Click for an example:</p>
+                <button>Button without unique id</button>
+                <div class="code-example">
+                    <span class="code-toggle" onclick="toggleCodeSection('click-tracker-example')">Show/Hide event data</span>
+                    <pre id="click-tracker-example" style="display: none;">
+<code>
+{
+    event: {
+        detail: {
+            className: ""
+            id: "click-tracker-demo"
+            tagName: "BUTTON"
+            textContent: "Button with unique id"
+        },
+        name: "button[@id="click-tracker-demo"]"
+        tracker: "Click"
+        type: "click"
+        value: "click-tracker-section:button[@id="click-tracker-demo"]"
+    },
+    session: "e78d0d80-8c98-11ea-b0a6-212e50dd65ae"
+    timestamp: 1588439944730
+}
+</code>
+                    </pre>
+                </div>
+            </article>
+            <article id="input-tracker-section">
+                <h4>Input Tracker</h4>
+                <form id="input-tracker-form">
+                    <p>Configuring the input tracker will emit events whenever the change event is fired on input, textarea, and select elements.</p>
+                    <label for="input-tracker-demo">Input Tracker: </label>
+                    <input id="input-tracker-demo" type="text" placeholder="Enter text to see onchange event" />
+                </form>
+                <div class="code-example">
+                    <span class="code-toggle" onclick="toggleCodeSection('input-tracker-example')">Show/Hide event data</span>
+                    <pre id="input-tracker-example" style="display: none;">
+<code>
+{
+    event: {
+        detail: {
+            className: "",
+            id: "input-tracker-demo",
+            tagName: "INPUT"
+        },
+        name: "input-tracker-section:input-tracker-form:input[@id="input-tracker-demo"]",
+        tracker: "Input",
+        type: "onchange",
+        value: "The cow jumped over the moon"
+    },
+    session: "9acc0140-8c98-11ea-b46e-c5c9a152b238",
+    timestamp: 1588439771926
+}
+</code>
+                    </pre>
+                </div>
+            </article>
+            <article id="error-tracker-section">
+                <h4>Error Tracker</h4>
+                <p>The error tracker creates events when window.onerror fires. Click this button to generate a javascript error event.</p>
+                <button id="error-tracker-demo" onclick="window.doesntexist.shoulderror">Click here to generate a javascript error</button>
+                <div class="code-example">
+                    <span class="code-toggle" onclick="toggleCodeSection('error-tracker-example')">Show/Hide example event</span>
+                    <pre id="error-tracker-example" style="display: none;">
+<code>
+{
+    event: {
+        detail: {
+            colno: 109,
+            error: {
+                message: "Cannot read property 'shoulderror' of undefined",
+                stack: "TypeError: Cannot read property 'shoulderror' of undefined"
+            },
+            lineno: 102
+        },
+        name: "https://www.somedomain.com/index.html",
+        tracker: "Error",
+        type: "error",
+        value: "Uncaught TypeError: Cannot read property 'shoulderror' of undefined"
+    },
+    session: "f5bcb6f0-8c96-11ea-a132-eb9711bfbd6d"
+    timestamp: 1588439131024
+}
+</code>
+                    </pre>
+                </div>
+            </article>
+            <article id="pageview-tracker-section">
+                <h4>Pageview Tracker</h4>
+                <p>Record pageviews using the <a href="https://developer.mozilla.org/en-US/docs/Web/API/History_API">History API</a>. <a href="#">Click here</a> to generate a pageview event.
+                <div class="code-example">
+                    <span class="code-toggle" onclick="toggleCodeSection('pageview-tracker-example')">Show/Hide example event</span>
+                    <pre id="pageview-tracker-example" style="display: none;">
+<code>
+{
+    event: {
+        detail: {},
+        name: "https://www.somedomain.com",
+        tracker: "PageView",
+        type: "pageview",
+        value: "demo.html"
+    },
+    session: "b79c9e70-8c92-11ea-a1f0-11e6ae329c9e"
+    timestamp: 1588437236183
+}
+</code>
+                    </pre>
+                </div>
+            </article>
+        </main>
+        <script>
+            require.config({
+                paths: {
+                    'uuid': 'https://cdn.jsdelivr.net/npm/uuid@7.0.3/dist/umd/uuid.min'
+                }
+            });
+            require(['index'], function(pa) {
+                var analytics = new pa.Analytics();
+                var consoleProvider = new pa.ConsoleProvider();
+                var pagePerformanceTracker = new pa.PagePerformanceTracker(consoleProvider);
+                var pageViewTracker = new pa.PageViewTracker(consoleProvider);
+                var inputTracker = new pa.InputTracker(consoleProvider);
+                var clickTracker = new pa.ClickTracker(consoleProvider);
+                var errorTracker = new pa.ErrorTracker(consoleProvider);
+                analytics.setProvider(consoleProvider);
+                analytics.addTracker(pagePerformanceTracker);
+                analytics.addTracker(pageViewTracker);
+                analytics.addTracker(inputTracker);
+                analytics.addTracker(clickTracker);
+                analytics.addTracker(errorTracker);
+                analytics.start();
+            });
+        </script>
+    </body>
+</html>

@@ -1,6 +1,13 @@
 import Analytics from './Analytics';
+import { ConsoleProvider } from './providers/';
+import { ClickTracker, ErrorTracker, InputTracker, PageViewTracker, PagePerformanceTracker } from './trackers/';
 
-export default Analytics;
-
-export * from './providers';
-export * from './trackers';
+export {
+    Analytics,
+    ConsoleProvider,
+    ClickTracker,
+    ErrorTracker,
+    InputTracker,
+    PageViewTracker,
+    PagePerformanceTracker
+};
