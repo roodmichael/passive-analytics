@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "outFile": "./demo/js/pa.js",
+        "target": "es5",
+        "module": "amd",
+        "moduleResolution": "node",
+        "lib": ["es7", "dom", "es5"]
+    },
+    "include": [
+        "./src/index.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "__tests__",
+        "**/*.test.ts"
+    ]
+}

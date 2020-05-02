@@ -1,0 +1,43 @@
+html, body {
+    padding: 0px;
+    margin: 0px;
+    background-color: #c0c0c0;
+
+    font-family: Arial;
+    font-size: 14px;
+    color: #222;
+}
+aside {
+    position: fixed;
+    width: 200px;
+    top: 0;
+    bottom: 0;
+    padding: 10px;
+    display: flex;
+    align-items: stretch;
+}
+aside .tree-view {
+    width: 100%;
+    overflow-y: scroll;
+}
+main {
+    width: 65rem;
+    padding: 10px;
+    margin-left: 225px;
+}
+article {
+    padding: 25px 20px;
+    border: 1px dashed darkgray;
+}
+form input {
+    width: 100%;
+}
+.code-example { margin-top: 15px; }
+.code-example pre { background: darkgray; overflow: auto; }
+.code-example .code-toggle {
+    display: block;
+    cursor: pointer;
+    color: #666;
+    font-style: bold;
+    text-decoration: underline;
+}
