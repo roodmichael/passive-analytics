@@ -1,5 +1,7 @@
 import { v1 as uuid } from 'uuid';
 
+import { BatchedEventBuffer } from './BatchedEventBuffer';
+
 import { IAnalyticsProvider, IEvent, IRecordEvent } from '../types';
 
 export class ConsoleProvider implements IAnalyticsProvider {
@@ -7,9 +9,11 @@ export class ConsoleProvider implements IAnalyticsProvider {
 
     private _config;
     private _sessionId: string;
+    private _buffer: BatchedEventBuffer;
 
     constructor(config?) {
         this._config = config;
+        this._buffer = new BatchedEventBuffer(this, { wait: 3000 });
     }
 
     /**
@@ -33,11 +37,15 @@ export class ConsoleProvider implements IAnalyticsProvider {
     /**
      * record event
      */
-    public async record(event: IEvent) {
+    public record(event: IEvent) {
         const recordEvent: IRecordEvent = this.generateRecordEvent(event);
 
+        this._buffer.putEvent(recordEvent);
+    }
+
+    public async send(recordEvents: IRecordEvent[]) {
         /* tslint:disable-next-line no-console */
-        console.log(recordEvent);
+        console.log({ events: recordEvents });
 
         return true;
     }
