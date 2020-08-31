@@ -6,7 +6,7 @@ import {
 } from '../types';
 
 export const defaultPagePerformanceTrackerConfig: IPagePerformanceTrackerConfig = {
-    entryTypeNames: ['paint', 'resource']
+    entryTypeNames: ['paint']
 };
 
 export class PagePerformanceTracker implements IAnalyticsTracker {

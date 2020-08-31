@@ -129,55 +129,6 @@ define("Analytics", ["require", "exports"], function (require, exports) {
     }());
     exports.default = Analytics;
 });
-define("providers/ConsoleProvider", ["require", "exports", "uuid"], function (require, exports, uuid_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var ConsoleProvider = /** @class */ (function () {
-        function ConsoleProvider(config) {
-            this._config = config;
-        }
-        /**
-         * get provider name
-         */
-        ConsoleProvider.prototype.getProviderName = function () {
-            return ConsoleProvider.providerName;
-        };
-        /**
-         * Generates a record event.
-         * @param event event to log
-         */
-        ConsoleProvider.prototype.generateRecordEvent = function (event) {
-            this._sessionId = this._sessionId || uuid_1.v1();
-            var timestamp = Date.now();
-            return { session: this._sessionId, timestamp: timestamp, event: event };
-        };
-        /**
-         * record event
-         */
-        ConsoleProvider.prototype.record = function (event) {
-            return __awaiter(this, void 0, void 0, function () {
-                var recordEvent;
-                return __generator(this, function (_a) {
-                    recordEvent = this.generateRecordEvent(event);
-                    /* tslint:disable-next-line no-console */
-                    console.log(recordEvent);
-                    return [2 /*return*/, true];
-                });
-            });
-        };
-        ConsoleProvider.providerName = 'Console';
-        return ConsoleProvider;
-    }());
-    exports.ConsoleProvider = ConsoleProvider;
-});
-define("providers/index", ["require", "exports", "providers/ConsoleProvider"], function (require, exports, ConsoleProvider_1) {
-    "use strict";
-    function __export(m) {
-        for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-    }
-    Object.defineProperty(exports, "__esModule", { value: true });
-    __export(ConsoleProvider_1);
-});
 define("lib/Identifiers", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -205,15 +156,160 @@ define("lib/Identifiers", ["require", "exports"], function (require, exports) {
         return exports.buildConcatenatedIdentifier(element.parentElement, id, true) + identifier;
     };
 });
-define("lib/index", ["require", "exports", "lib/Identifiers"], function (require, exports, Identifiers_1) {
+define("lib/Utils", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.debounce = function (callback, wait) {
+        var timeout = null;
+        return function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            var next = function () { return callback.apply(void 0, args); };
+            clearTimeout(timeout);
+            timeout = setTimeout(next, wait);
+        };
+    };
+});
+define("lib/index", ["require", "exports", "lib/Identifiers", "lib/Utils"], function (require, exports, Identifiers_1, Utils_1) {
     "use strict";
     function __export(m) {
         for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
     }
     Object.defineProperty(exports, "__esModule", { value: true });
     __export(Identifiers_1);
+    __export(Utils_1);
 });
-define("trackers/ClickTracker", ["require", "exports", "lib/index"], function (require, exports, lib_1) {
+define("providers/BatchedEventBuffer", ["require", "exports", "lib/index"], function (require, exports, lib_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var BatchedEventBuffer = /** @class */ (function () {
+        function BatchedEventBuffer(provider, params) {
+            var _this = this;
+            this._batchedEvents = [];
+            this._wait = 1000;
+            this.sendBatchedEvents = function () {
+                _this._provider.send(_this._batchedEvents)
+                    .then(function () { return _this.flushEvents(); })
+                    .catch(function () { });
+            };
+            this.debounceSendEvents = lib_1.debounce(this.sendBatchedEvents, this._wait);
+            this._provider = provider;
+            window.addEventListener('beforeunload', function (event) { return _this.sendBatchedEvents(); });
+        }
+        BatchedEventBuffer.prototype.putEvent = function (event) {
+            this._batchedEvents.push(event);
+            this.debounceSendEvents();
+        };
+        BatchedEventBuffer.prototype.flushEvents = function () {
+            this._batchedEvents = [];
+        };
+        return BatchedEventBuffer;
+    }());
+    exports.BatchedEventBuffer = BatchedEventBuffer;
+});
+define("providers/CustomProvider", ["require", "exports", "uuid", "providers/BatchedEventBuffer"], function (require, exports, uuid_1, BatchedEventBuffer_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var CustomProvider = /** @class */ (function () {
+        function CustomProvider(_customCallback, _config) {
+            this._customCallback = _customCallback;
+            this._config = _config;
+            this._buffer = new BatchedEventBuffer_1.BatchedEventBuffer(this, { wait: 1000 });
+        }
+        /**
+         * get provider name
+         */
+        CustomProvider.prototype.getProviderName = function () {
+            return CustomProvider.providerName;
+        };
+        /**
+         * Generates a record event.
+         * @param event event to log
+         */
+        CustomProvider.prototype.generateRecordEvent = function (event) {
+            this._sessionId = this._sessionId || uuid_1.v1();
+            var timestamp = Date.now();
+            return { session: this._sessionId, timestamp: timestamp, event: event };
+        };
+        /**
+         * record event
+         */
+        CustomProvider.prototype.record = function (event) {
+            var recordEvent = this.generateRecordEvent(event);
+            this._buffer.putEvent(recordEvent);
+        };
+        /**
+         * Call custom callback provided
+         * @param recordEvent recordEvent returned to customer
+         */
+        CustomProvider.prototype.send = function (recordEvents) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, this._customCallback(this._config.path, { events: recordEvents })];
+                });
+            });
+        };
+        CustomProvider.providerName = 'CustomProvider';
+        return CustomProvider;
+    }());
+    exports.CustomProvider = CustomProvider;
+});
+define("providers/ConsoleProvider", ["require", "exports", "uuid", "providers/BatchedEventBuffer"], function (require, exports, uuid_2, BatchedEventBuffer_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var ConsoleProvider = /** @class */ (function () {
+        function ConsoleProvider(config) {
+            this._config = config;
+            this._buffer = new BatchedEventBuffer_2.BatchedEventBuffer(this, { wait: 3000 });
+        }
+        /**
+         * get provider name
+         */
+        ConsoleProvider.prototype.getProviderName = function () {
+            return ConsoleProvider.providerName;
+        };
+        /**
+         * Generates a record event.
+         * @param event event to log
+         */
+        ConsoleProvider.prototype.generateRecordEvent = function (event) {
+            this._sessionId = this._sessionId || uuid_2.v1();
+            var timestamp = Date.now();
+            return { session: this._sessionId, timestamp: timestamp, event: event };
+        };
+        /**
+         * record event
+         */
+        ConsoleProvider.prototype.record = function (event) {
+            var recordEvent = this.generateRecordEvent(event);
+            this._buffer.putEvent(recordEvent);
+        };
+        ConsoleProvider.prototype.send = function (recordEvents) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    /* tslint:disable-next-line no-console */
+                    console.log({ events: recordEvents });
+                    return [2 /*return*/, true];
+                });
+            });
+        };
+        ConsoleProvider.providerName = 'Console';
+        return ConsoleProvider;
+    }());
+    exports.ConsoleProvider = ConsoleProvider;
+});
+define("providers/index", ["require", "exports", "providers/CustomProvider", "providers/ConsoleProvider"], function (require, exports, CustomProvider_1, ConsoleProvider_1) {
+    "use strict";
+    function __export(m) {
+        for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    }
+    Object.defineProperty(exports, "__esModule", { value: true });
+    __export(CustomProvider_1);
+    __export(ConsoleProvider_1);
+});
+define("trackers/ClickTracker", ["require", "exports", "lib/index"], function (require, exports, lib_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var defaultClickTrackerConfig = {
@@ -240,8 +336,8 @@ define("trackers/ClickTracker", ["require", "exports", "lib/index"], function (r
             this.untrack();
         };
         ClickTracker.prototype.trackExecute = function (clickTarget) {
-            var name = lib_1.buildLeafNodeIdentifier(clickTarget, this._config.idAttribute);
-            var value = lib_1.buildConcatenatedIdentifier(clickTarget, this._config.idAttribute);
+            var name = lib_2.buildLeafNodeIdentifier(clickTarget, this._config.idAttribute);
+            var value = lib_2.buildConcatenatedIdentifier(clickTarget, this._config.idAttribute);
             var event = {
                 tracker: this.getTrackerName(),
                 type: 'click',
@@ -308,7 +404,7 @@ define("trackers/ErrorTracker", ["require", "exports"], function (require, expor
     exports.ErrorTracker = ErrorTracker;
     ;
 });
-define("trackers/InputTracker", ["require", "exports", "lib/index"], function (require, exports, lib_2) {
+define("trackers/InputTracker", ["require", "exports", "lib/index"], function (require, exports, lib_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var defaultInputTrackerConfig = {
@@ -335,7 +431,7 @@ define("trackers/InputTracker", ["require", "exports", "lib/index"], function (r
             this.untrack();
         };
         InputTracker.prototype.trackExecute = function (target) {
-            var name = lib_2.buildConcatenatedIdentifier(target, this._config.idAttribute);
+            var name = lib_3.buildConcatenatedIdentifier(target, this._config.idAttribute);
             var event = {
                 tracker: this.getTrackerName(),
                 type: 'onchange',
@@ -365,7 +461,7 @@ define("trackers/PagePerformanceTracker", ["require", "exports"], function (requ
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.defaultPagePerformanceTrackerConfig = {
-        entryTypeNames: ['paint', 'resource']
+        entryTypeNames: ['paint']
     };
     var PagePerformanceTracker = /** @class */ (function () {
         function PagePerformanceTracker(provider) {
@@ -495,6 +591,7 @@ define("index", ["require", "exports", "Analytics", "providers/index", "trackers
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Analytics = Analytics_1.default;
     exports.ConsoleProvider = providers_1.ConsoleProvider;
+    exports.CustomProvider = providers_1.CustomProvider;
     exports.ClickTracker = trackers_1.ClickTracker;
     exports.ErrorTracker = trackers_1.ErrorTracker;
     exports.InputTracker = trackers_1.InputTracker;
