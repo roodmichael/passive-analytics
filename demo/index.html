@@ -3,7 +3,6 @@
         <title>Passive Analytics: Demo Page</title>
         <link rel="stylesheet" type="text/css" href="css/demo.css">
         <link href="https://unpkg.com/98.css" rel="stylesheet" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
         <script src="js/demo.js"></script>
         <script src="js/pa.js"></script>
     </head>
@@ -170,27 +169,20 @@
             </article>
         </main>
         <script>
-            require.config({
-                paths: {
-                    'uuid': 'https://cdn.jsdelivr.net/npm/uuid@7.0.3/dist/umd/uuid.min'
-                }
-            });
-            require(['index'], function(pa) {
-                var analytics = new pa.Analytics();
-                var consoleProvider = new pa.ConsoleProvider();
-                var pagePerformanceTracker = new pa.PagePerformanceTracker(consoleProvider);
-                var pageViewTracker = new pa.PageViewTracker(consoleProvider);
-                var inputTracker = new pa.InputTracker(consoleProvider);
-                var clickTracker = new pa.ClickTracker(consoleProvider);
-                var errorTracker = new pa.ErrorTracker(consoleProvider);
-                analytics.setProvider(consoleProvider);
-                analytics.addTracker(pagePerformanceTracker);
-                analytics.addTracker(pageViewTracker);
-                analytics.addTracker(inputTracker);
-                analytics.addTracker(clickTracker);
-                analytics.addTracker(errorTracker);
-                analytics.start();
-            });
+            var analytics = new pa.Analytics();
+            var consoleProvider = new pa.ConsoleProvider();
+            var pagePerformanceTracker = new pa.PagePerformanceTracker(consoleProvider);
+            var pageViewTracker = new pa.PageViewTracker(consoleProvider);
+            var inputTracker = new pa.InputTracker(consoleProvider);
+            var clickTracker = new pa.ClickTracker(consoleProvider);
+            var errorTracker = new pa.ErrorTracker(consoleProvider);
+            analytics.setProvider(consoleProvider);
+            analytics.addTracker(pagePerformanceTracker);
+            analytics.addTracker(pageViewTracker);
+            analytics.addTracker(inputTracker);
+            analytics.addTracker(clickTracker);
+            analytics.addTracker(errorTracker);
+            analytics.start();
         </script>
     </body>
 </html>
