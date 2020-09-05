@@ -12,3 +12,16 @@ export {
     PageViewTracker,
     PagePerformanceTracker
 };
+
+if (window) {
+    (window as any).pa = {
+        Analytics,
+        ConsoleProvider,
+        CustomProvider,
+        ClickTracker,
+        ErrorTracker,
+        InputTracker,
+        PageViewTracker,
+        PagePerformanceTracker
+    }
+}

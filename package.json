@@ -8,7 +8,9 @@
     "lint": "tslint -c tslint.json src/**/*.ts",
     "test": "jest",
     "build": "npm run lint && npm run test && tsc",
-    "build:demo": "tsc -p tsconfig.demo.json"
+    "build:demo": "npm run lint && npm run test && webpack --config webpack.demo.js",
+    "build:dist:dev": "npm run lint && npm run test && webpack --config webpack.dev.js",
+    "build:dist:prod": "npm run lint && npm run test && webpack --config webpack.prod.js"
   },
   "repository": {
     "type": "git",
@@ -28,9 +30,13 @@
     "@types/jest": "^25.1.4",
     "@types/uuid": "^7.0.2",
     "jest": "^25.2.3",
+    "terser-webpack-plugin": "^4.1.0",
     "ts-jest": "^25.2.1",
+    "ts-loader": "^8.0.3",
     "tslint": "^6.1.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
   "dependencies": {
     "uuid": "^7.0.2"
