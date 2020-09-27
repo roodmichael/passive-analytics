@@ -12,7 +12,8 @@ export class ConsoleProvider implements IAnalyticsProvider {
     private _buffer: BatchedEventBuffer;
 
     constructor(config?) {
-        this._config = config;
+        this._config = config || {};
+
         this._buffer = new BatchedEventBuffer(this, { wait: 3000 });
     }
 
@@ -21,6 +22,25 @@ export class ConsoleProvider implements IAnalyticsProvider {
      */
     getProviderName(): string {
         return ConsoleProvider.providerName;
+    }
+
+    /**
+     * get sessoin id
+     */
+    getSessionId(): string {
+        return this._sessionId;
+    }
+
+    /**
+     * set session id
+     * @param sessionId session id to set
+     */
+    setSessionId(sessionId: string): void {
+        if (!sessionId) {
+            return;
+        }
+
+        this._sessionId = sessionId;
     }
 
     /**
@@ -35,7 +55,8 @@ export class ConsoleProvider implements IAnalyticsProvider {
     }
 
     /**
-     * record event
+     * adds event to the buffer
+     * @param event event to put into the buffer
      */
     public record(event: IEvent) {
         const recordEvent: IRecordEvent = this.generateRecordEvent(event);

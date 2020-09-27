@@ -4,6 +4,12 @@ export interface IAnalyticsProvider {
     // name of the provider
     getProviderName(): string;
 
+    // session id
+    getSessionId(): string;
+
+    // sets session id
+    setSessionId(sessionId: string);
+
     // record events and return true if succeeded
     record(event: IEvent)
 

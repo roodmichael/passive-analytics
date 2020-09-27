@@ -26,6 +26,25 @@ export class CustomProvider implements IAnalyticsProvider {
     }
 
     /**
+     * get session id
+     */
+    public getSessionId(): string {
+        return this._sessionId;
+    }
+
+    /**
+     * sets session id used by provider
+     * @param sessionId session id
+     */
+    public setSessionId(sessionId: string) {
+        if (!sessionId) {
+            return;
+        }
+
+        this._sessionId = sessionId;
+    }
+
+    /**
      * record event
      */
     public record(event: IEvent) {
