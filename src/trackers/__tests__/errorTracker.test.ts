@@ -1,17 +1,15 @@
 import { ErrorTracker } from '../';
-import { ConsoleProvider } from '../../providers';
 
-import { IAnalyticsProvider, IAnalyticsTracker } from '../../types';
+import { IAnalyticsTracker, IEvent } from '../../types';
 
 describe('Error Tracker >', () => {
-    let provider: IAnalyticsProvider;
     let tracker: IAnalyticsTracker;
-    let providerSpy;
+    let recordSpy;
     beforeEach(() => {
-        providerSpy = jest.spyOn(ConsoleProvider.prototype, 'record');
+        recordSpy = jest.fn();
 
-        provider = new ConsoleProvider();
-        tracker = new ErrorTracker(provider);
+        tracker = new ErrorTracker();
+        tracker.setRecord((event: IEvent) => recordSpy(event));
     });
     afterEach(() => {
         jest.clearAllMocks();
@@ -20,11 +18,11 @@ describe('Error Tracker >', () => {
         expect(tracker.getTrackerName()).toEqual('Error');
     });
     test('does nothing if not started', () => {
-        expect(providerSpy).toHaveBeenCalledTimes(0);
+        expect(recordSpy).toHaveBeenCalledTimes(0);
     });
     test('records javascript error from window.onerror', () => {
         tracker.start();
         window.onerror("A test message");
-        expect(providerSpy).toHaveBeenCalled();
+        expect(recordSpy).toHaveBeenCalled();
     });
 });

@@ -17,6 +17,10 @@ export class BatchedEventBuffer {
         this.debounceSendEvents();
     }
 
+    getBatchedEvents() {
+        return this._batchedEvents;
+    }
+
     flushEvents() {
         this._batchedEvents = [];
     }

@@ -18,7 +18,7 @@ describe('Analytics Client >', () => {
     let tracker: IAnalyticsTracker;
     beforeEach(() => {
         provider = new ConsoleProvider();
-        tracker = new PageViewTracker(provider);
+        tracker = new PageViewTracker();
         analytics = new Analytics();
         analytics.configure(INITIAL_CONFIGURATION);
         analytics.setProvider(provider);

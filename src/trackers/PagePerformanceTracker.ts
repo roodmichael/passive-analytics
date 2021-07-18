@@ -1,5 +1,6 @@
+import { BaseTracker } from './BaseTracker';
+
 import {
-    IAnalyticsProvider,
     IAnalyticsTracker,
     IPagePerformanceTrackerConfig,
     IEvent
@@ -9,16 +10,14 @@ export const defaultPagePerformanceTrackerConfig: IPagePerformanceTrackerConfig 
     entryTypeNames: ['paint']
 };
 
-export class PagePerformanceTracker implements IAnalyticsTracker {
+export class PagePerformanceTracker extends BaseTracker implements IAnalyticsTracker {
     static trackerName: string = 'PagePerformance';
-
-    private _provider: IAnalyticsProvider;
 
     private _config: IPagePerformanceTrackerConfig;
 
-    constructor(provider) {
+    constructor() {
+        super();
         this._config = defaultPagePerformanceTrackerConfig;
-        this._provider = provider;
     }
 
     /**
@@ -68,7 +67,7 @@ export class PagePerformanceTracker implements IAnalyticsTracker {
                     event.value = entry.duration;
                 }
 
-                this._provider.record(event);
+                this._record(event);
             });
         });
         observer.observe({ entryTypes: this._config.entryTypeNames });

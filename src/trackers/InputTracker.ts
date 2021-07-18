@@ -1,7 +1,7 @@
 import { buildConcatenatedIdentifier } from '../lib';
+import { BaseTracker } from './BaseTracker';
 
 import {
-    IAnalyticsProvider,
     IAnalyticsTracker,
     IAnalyticsElementTrackerConfig,
     IEvent
@@ -11,15 +11,13 @@ const defaultInputTrackerConfig: IAnalyticsElementTrackerConfig = {
     idAttribute: 'id'
 };
 
-export class InputTracker implements IAnalyticsTracker {
+export class InputTracker extends BaseTracker implements IAnalyticsTracker {
     static trackerName: string = 'Input';
-
-    private _provider: IAnalyticsProvider;
 
     private _config: IAnalyticsElementTrackerConfig;
 
-    constructor(provider) {
-        this._provider = provider;
+    constructor() {
+        super();
         this._config = defaultInputTrackerConfig;
     }
 
@@ -52,7 +50,7 @@ export class InputTracker implements IAnalyticsTracker {
                 tagName: target.tagName
             }
         };
-        this._provider.record(event);
+        this._record(event);
     }
 
     /* local variable for addEventListener and removeEventListener */

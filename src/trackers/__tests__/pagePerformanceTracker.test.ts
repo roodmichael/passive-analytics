@@ -1,23 +1,21 @@
 import { PagePerformanceTracker, defaultPagePerformanceTrackerConfig } from '../';
-import { ConsoleProvider } from '../../providers';
 import { MockPerformanceObserver, MOCK_PERFORMANCE_ENTRIES } from '../__mocks__';
 
-import { IAnalyticsProvider, IAnalyticsTracker } from '../../types';
+import { IAnalyticsTracker, IEvent } from '../../types';
 
 describe('Page Performance Tracker >', () => {
     describe('supported browsers', () => {
-        let provider: IAnalyticsProvider;
         let tracker: IAnalyticsTracker;
         let trackerSpy;
-        let providerSpy;
+        let recordSpy;
         beforeEach(() => {
             // @ts-ignore
             window.PerformanceObserver = MockPerformanceObserver;
             trackerSpy = jest.spyOn(window.PerformanceObserver.prototype, 'observe');
-            providerSpy = jest.spyOn(ConsoleProvider.prototype, 'record');
+            recordSpy = jest.fn();
 
-            provider = new ConsoleProvider();
-            tracker = new PagePerformanceTracker(provider);
+            tracker = new PagePerformanceTracker();
+            tracker.setRecord((event) => recordSpy(event));
         });
         afterEach(() => {
             jest.clearAllMocks();
@@ -40,23 +38,22 @@ describe('Page Performance Tracker >', () => {
         });
         test('Provider is called correct number of times', () => {
             tracker.start();
-            expect(providerSpy).toHaveBeenCalledTimes(MOCK_PERFORMANCE_ENTRIES.length);
+            expect(recordSpy).toHaveBeenCalledTimes(MOCK_PERFORMANCE_ENTRIES.length);
         });
     });
     describe('unsupported browsers', () => {
-        let provider: IAnalyticsProvider;
         let tracker: IAnalyticsTracker;
-        let providerSpy;
+        let recordSpy;
         beforeEach(() => {
             window.PerformanceObserver = undefined;
-            providerSpy = jest.spyOn(ConsoleProvider.prototype, 'record');
+            recordSpy = jest.fn();
 
-            provider = new ConsoleProvider();
-            tracker = new PagePerformanceTracker(provider);
+            tracker = new PagePerformanceTracker();
+            tracker.setRecord((event: IEvent) => recordSpy(event));
         });
         test('Provider is not called', () => {
             tracker.start();
-            expect(providerSpy).toHaveBeenCalledTimes(0);
+            expect(recordSpy).toHaveBeenCalledTimes(0);
         });
     });
 });

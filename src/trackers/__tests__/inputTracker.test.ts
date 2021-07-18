@@ -1,5 +1,6 @@
 import { InputTracker } from '../';
-import { ConsoleProvider } from '../../providers';
+
+import { IEvent } from '../../types';
 
 const setupDom = () => {
     const inputElement = window.document.createElement('input');
@@ -12,17 +13,16 @@ const setupDom = () => {
 };
 
 describe('Input Tracker >', () => {
-    let providerSpy;
-    let provider;
+    let recordSpy;
     let tracker;
     beforeAll(() => {
         setupDom();
     });
     beforeEach(() => {
-        providerSpy = jest.spyOn(ConsoleProvider.prototype, 'record');
+        recordSpy = jest.fn();
 
-        provider = new ConsoleProvider();
-        tracker = new InputTracker(provider);
+        tracker = new InputTracker();
+        tracker.setRecord((event: IEvent) => recordSpy(event));
     });
     afterEach(() => {
         tracker.stop();
@@ -32,18 +32,18 @@ describe('Input Tracker >', () => {
         expect(tracker.getTrackerName()).toEqual('Input');
     });
     test('does nothing if not started', () => {
-        expect(providerSpy).toHaveBeenCalledTimes(0);
+        expect(recordSpy).toHaveBeenCalledTimes(0);
     });
     test('records onchange event correct', () => {
         tracker.start();
         window.document.getElementById('input-test').dispatchEvent(new window.Event('change', { bubbles: true }));
-        expect(providerSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "input[@id=\"input-test\"]"}));
+        expect(recordSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "input[@id=\"input-test\"]"}));
     });
     test('records onchange event to custom id element correctly', () => {
         const initialConfiguration = { idAttribute: 'data-pa-id' };
         tracker.configure(initialConfiguration);
         tracker.start();
         window.document.querySelector('input[data-pa-id="custom-input-test"]').dispatchEvent(new window.Event('change', { bubbles: true }));
-        expect(providerSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "input[@data-pa-id=\"custom-input-test\"]"}));
+        expect(recordSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "input[@data-pa-id=\"custom-input-test\"]"}));
     });
 });

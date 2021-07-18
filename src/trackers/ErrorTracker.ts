@@ -1,12 +1,11 @@
 import { IAnalyticsTracker, IEvent } from '../types';
+import { BaseTracker } from './BaseTracker';
 
-export class ErrorTracker implements IAnalyticsTracker {
+export class ErrorTracker extends BaseTracker implements IAnalyticsTracker {
     static trackerName: string = 'Error';
 
-    private _provider;
-
-    constructor(provider) {
-        this._provider = provider;
+    constructor() {
+        super();
     }
 
     public getTrackerName(): string {
@@ -25,7 +24,7 @@ export class ErrorTracker implements IAnalyticsTracker {
             value: message,
             detail: { lineno, colno, error }
         };
-        this._provider.record(event);
+        this._record(event);
     }
 
     private track(): void {

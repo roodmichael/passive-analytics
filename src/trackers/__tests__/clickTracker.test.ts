@@ -1,5 +1,6 @@
 import { ClickTracker } from '../';
-import { ConsoleProvider } from '../../providers';
+
+import { IEvent } from '../../types';
 
 const setupDom = () => {
     const idElement = window.document.createElement('span');
@@ -23,17 +24,16 @@ const setupDom = () => {
 };
 
 describe('Click Tracker >', () => {
-    let providerSpy;
-    let provider;
+    let recordSpy;
     let tracker;
     beforeAll(() => {
         setupDom();
     });
     beforeEach(() => {
-        providerSpy = jest.spyOn(ConsoleProvider.prototype, 'record');
+        recordSpy = jest.fn();
 
-        provider = new ConsoleProvider();
-        tracker = new ClickTracker(provider);
+        tracker = new ClickTracker();
+        tracker.setRecord((event: IEvent) => recordSpy(event));
     });
     afterEach(() => {
         tracker.stop();
@@ -43,33 +43,33 @@ describe('Click Tracker >', () => {
         expect(tracker.getTrackerName()).toEqual('Click');
     });
     test('does nothing if not started', () => {
-        expect(providerSpy).toHaveBeenCalledTimes(0);
+        expect(recordSpy).toHaveBeenCalledTimes(0);
     });
     test('records click to dom id element correctly', () => {
         tracker.start();
         window.document.getElementById('title').dispatchEvent(new window.Event('click', { bubbles: true }));
-        expect(providerSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "span[@id=\"title\"]"}));
+        expect(recordSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "span[@id=\"title\"]"}));
     });
     test('records click to dom id element correctly', () => {
         tracker.start();
         window.document.getElementsByClassName('title')[0].dispatchEvent(new window.Event('click', { bubbles: true }));
-        expect(providerSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "span[@class=\"title\"]"}));
+        expect(recordSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "span[@class=\"title\"]"}));
     });
     test('records click to tag with no attributes but with text correctly', () => {
         tracker.start();
         window.document.getElementsByTagName('h3')[0].dispatchEvent(new window.Event('click', { bubbles: true }));
-        expect(providerSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "h3[text()=\"title\"]"}));
+        expect(recordSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "h3[text()=\"title\"]"}));
     });
     test('records click to empty element correctly', () => {
         tracker.start();
         window.document.getElementsByTagName('p')[0].dispatchEvent(new window.Event('click', { bubbles: true }));
-        expect(providerSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "p"}));
+        expect(recordSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "p"}));
     });
     test('records click to custom dom id element correctly', () => {
         const initialConfiguration = { idAttribute: 'data-pa-id' };
         tracker.configure(initialConfiguration);
         tracker.start();
         window.document.querySelector('span[data-pa-id="custom"]').dispatchEvent(new window.Event('click', { bubbles: true }));
-        expect(providerSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "span[@data-pa-id=\"custom\"]"}));
+        expect(recordSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "span[@data-pa-id=\"custom\"]"}));
     });
 });

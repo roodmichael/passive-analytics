@@ -1,7 +1,7 @@
 import { buildLeafNodeIdentifier, buildConcatenatedIdentifier } from '../lib';
+import { BaseTracker } from './BaseTracker';
 
 import {
-    IAnalyticsProvider,
     IAnalyticsTracker,
     IAnalyticsElementTrackerConfig,
     IEvent
@@ -11,15 +11,13 @@ const defaultClickTrackerConfig: IAnalyticsElementTrackerConfig = {
     idAttribute: 'id'
 };
 
-export class ClickTracker implements IAnalyticsTracker {
+export class ClickTracker extends BaseTracker implements IAnalyticsTracker {
     static trackerName: string = 'Click';
-
-    private _provider: IAnalyticsProvider;
 
     private _config: IAnalyticsElementTrackerConfig;
 
-    constructor(provider) {
-        this._provider = provider;
+    constructor() {
+        super();
         this._config = defaultClickTrackerConfig;
     }
 
@@ -54,7 +52,7 @@ export class ClickTracker implements IAnalyticsTracker {
                 textContent: clickTarget.textContent
             }
         };
-        this._provider.record(event);
+        this._record(event);
     };
 
     /* local variable for addEventListener and removeEventListener */
