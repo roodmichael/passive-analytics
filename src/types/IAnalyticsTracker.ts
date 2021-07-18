@@ -1,4 +1,6 @@
-export interface IAnalyticsTracker {
+import { IAnalyticsBaseTracker } from './';
+
+export interface IAnalyticsTracker extends IAnalyticsBaseTracker {
     // get name of tracker
     getTrackerName(): string;
 

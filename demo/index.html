@@ -169,20 +169,14 @@
             </article>
         </main>
         <script>
-            var analytics = new pa.Analytics();
-            var consoleProvider = new pa.ConsoleProvider();
-            var pagePerformanceTracker = new pa.PagePerformanceTracker(consoleProvider);
-            var pageViewTracker = new pa.PageViewTracker(consoleProvider);
-            var inputTracker = new pa.InputTracker(consoleProvider);
-            var clickTracker = new pa.ClickTracker(consoleProvider);
-            var errorTracker = new pa.ErrorTracker(consoleProvider);
-            analytics.setProvider(consoleProvider);
-            analytics.addTracker(pagePerformanceTracker);
-            analytics.addTracker(pageViewTracker);
-            analytics.addTracker(inputTracker);
-            analytics.addTracker(clickTracker);
-            analytics.addTracker(errorTracker);
-            analytics.start();
+            var analytics = new pa.Analytics()
+                .setProvider(new pa.ConsoleProvider())
+                .addTracker(new pa.PagePerformanceTracker())
+                .addTracker(new pa.PageViewTracker())
+                .addTracker(new pa.InputTracker())
+                .addTracker(new pa.ClickTracker())
+                .addTracker(new pa.ErrorTracker())
+                .start();
         </script>
     </body>
 </html>

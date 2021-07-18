@@ -109,10 +109,10 @@ import Analytics, {
 
 const analytics = new Analytics();
 const analyticsProvider = new ConsoleProvider();
-const pagePerformanceTracker = new PagePerformanceTracker(analyticsProvider);
-const pageViewTracker = new PageViewTracker(analyticsProvider);
-const errorTracker = new ErrorTracker(analyticsProvider);
-const clickTracker = new ClickTracker(analyticsProvider);
+const pagePerformanceTracker = new PagePerformanceTracker();
+const pageViewTracker = new PageViewTracker();
+const errorTracker = new ErrorTracker();
+const clickTracker = new ClickTracker();
 analytics.setProvider(analyticsProvider);
 analytics.addTracker(pagePerformanceTracker);
 analytics.addTracker(pageViewTracker);

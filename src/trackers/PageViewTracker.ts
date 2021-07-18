@@ -1,12 +1,14 @@
+import { BaseTracker } from './BaseTracker';
+
 import { IAnalyticsTracker, IEvent, IRecordEvent } from '../types';
 
-export class PageViewTracker implements IAnalyticsTracker {
+export class PageViewTracker extends BaseTracker implements IAnalyticsTracker {
     static trackerName: string = 'PageView';
 
     private _provider;
 
-    constructor(provider) {
-        this._provider = provider;
+    constructor() {
+        super();
     }
 
     public getTrackerName(): string {
@@ -25,7 +27,7 @@ export class PageViewTracker implements IAnalyticsTracker {
             value: window.location.pathname,
             detail: {}
         };
-        this._provider.record(event);
+        this._record(event);
     }
 
     private track(): void {

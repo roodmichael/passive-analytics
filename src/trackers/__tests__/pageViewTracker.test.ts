@@ -1,17 +1,15 @@
 import { PageViewTracker } from '../';
-import { ConsoleProvider } from '../../providers';
 
-import { IAnalyticsProvider, IAnalyticsTracker } from '../../types';
+import { IAnalyticsTracker, IEvent } from '../../types';
 
 describe('Page View Tracker >', () => {
-    let provider: IAnalyticsProvider;
     let tracker: IAnalyticsTracker;
-    let providerSpy;
+    let recordSpy;
     beforeEach(() => {
-        providerSpy = jest.spyOn(ConsoleProvider.prototype, 'record');
+        recordSpy = jest.fn();
 
-        provider = new ConsoleProvider();
-        tracker = new PageViewTracker(provider);
+        tracker = new PageViewTracker();
+        tracker.setRecord((event: IEvent) => recordSpy(event));
     });
     afterEach(() => {
         jest.clearAllMocks();
@@ -20,10 +18,10 @@ describe('Page View Tracker >', () => {
         expect(tracker.getTrackerName()).toEqual('PageView');
     });
     test('does nothing if not started', () => {
-        expect(providerSpy).toHaveBeenCalledTimes(0);
+        expect(recordSpy).toHaveBeenCalledTimes(0);
     });
     test('records first page visit on start', () => {
         tracker.start();
-        expect(providerSpy).toHaveBeenCalled();
+        expect(recordSpy).toHaveBeenCalled();
     });
 });

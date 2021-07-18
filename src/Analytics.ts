@@ -14,6 +14,8 @@ export default class Analytics {
     constructor() {
         this._config = {};
         this._trackers = [];
+
+        return this;
     }
 
     /**
@@ -36,6 +38,8 @@ export default class Analytics {
      */
     public setProvider(provider: IAnalyticsProvider) {
         this._provider = provider;
+
+        return this;
     }
 
     /**
@@ -49,7 +53,10 @@ export default class Analytics {
      * add tracker
      */
     public addTracker(tracker: IAnalyticsTracker) {
+        tracker.setRecord((event: IEvent) => this._provider.record(event));
         this._trackers.push(tracker);
+
+        return this;
     }
 
     /**
