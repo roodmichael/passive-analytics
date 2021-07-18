@@ -9,7 +9,6 @@
     "test": "jest",
     "build": "npm run lint && npm run test && tsc",
     "build:demo": "npm run lint && npm run test && webpack --config webpack.demo.js",
-    "build:demo:no-tests": "npm run lint && webpack --config webpack.demo.js",
     "build:dist:dev": "npm run lint && npm run test && webpack --config webpack.dev.js",
     "build:dist:prod": "npm run lint && npm run test && webpack --config webpack.prod.js"
   },
