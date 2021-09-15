@@ -5,7 +5,7 @@ export interface IAnalyticsTracker extends IAnalyticsBaseTracker {
     getTrackerName(): string;
 
     // configure the tracker
-    configure?(config?: any): void;
+    configure?(config?: unknown): void;
 
     // start the tracker
     start(): void;

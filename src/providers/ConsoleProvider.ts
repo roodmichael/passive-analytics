@@ -5,16 +5,13 @@ import { BatchedEventBuffer } from './BatchedEventBuffer';
 import { IAnalyticsProvider, IEvent, IRecordEvent } from '../types';
 
 export class ConsoleProvider implements IAnalyticsProvider {
-    static providerName: string = 'Console';
+    static providerName = 'Console';
 
-    private _config;
     private _sessionId: string;
     private _buffer: BatchedEventBuffer;
 
-    constructor(config?) {
-        this._config = config || {};
-
-        this._buffer = new BatchedEventBuffer(this, { wait: 3000 });
+    constructor() {
+        this._buffer = new BatchedEventBuffer(this);
     }
 
     /**
@@ -58,13 +55,13 @@ export class ConsoleProvider implements IAnalyticsProvider {
      * adds event to the buffer
      * @param event event to put into the buffer
      */
-    public record(event: IEvent) {
+    public record(event: IEvent): void {
         const recordEvent: IRecordEvent = this.generateRecordEvent(event);
 
         this._buffer.putEvent(recordEvent);
     }
 
-    public async send(recordEvents: IRecordEvent[]) {
+    public async send(recordEvents: IRecordEvent[]): Promise<boolean> {
         /* tslint:disable-next-line no-console */
         console.log({ events: recordEvents });
 

@@ -36,7 +36,7 @@ export default class Analytics {
      * 
      * @param {IAnalyticsProvider} provider 
      */
-    public setProvider(provider: IAnalyticsProvider) {
+    public setProvider(provider: IAnalyticsProvider): Analytics {
         this._provider = provider;
 
         return this;
@@ -45,14 +45,14 @@ export default class Analytics {
     /**
      * get provider name
      */
-    public getProviderName() {
+    public getProviderName(): string {
         return this._provider.getProviderName();
     }
 
     /**
      * add tracker
      */
-    public addTracker(tracker: IAnalyticsTracker) {
+    public addTracker(tracker: IAnalyticsTracker): Analytics {
         tracker.setRecord((event: IEvent) => this._provider.record(event));
         this._trackers.push(tracker);
 

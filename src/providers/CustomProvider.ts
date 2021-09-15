@@ -1,21 +1,24 @@
 import { v1 as uuid } from 'uuid';
 
 import { BatchedEventBuffer } from './BatchedEventBuffer';
-
 import { IAnalyticsProvider, IEvent, IRecordEvent } from '../types';
 
+export interface ICustomProviderConfig {
+    path: string;
+}
+
 export class CustomProvider implements IAnalyticsProvider {
-    static providerName: string = 'CustomProvider';
+    static providerName = 'CustomProvider';
 
     private _customCallback;
     private _config;
     private _sessionId: string;
     private _buffer: BatchedEventBuffer;
 
-    constructor(_customCallback, _config?) {
+    constructor(_customCallback: () => boolean, _config?: ICustomProviderConfig) {
         this._customCallback = _customCallback;
         this._config = _config;
-        this._buffer = new BatchedEventBuffer(this, { wait: 1000 });
+        this._buffer = new BatchedEventBuffer(this);
     }
 
     /**
@@ -36,7 +39,7 @@ export class CustomProvider implements IAnalyticsProvider {
      * sets session id used by provider
      * @param sessionId session id
      */
-    public setSessionId(sessionId: string) {
+    public setSessionId(sessionId: string): void {
         if (!sessionId) {
             return;
         }
@@ -47,7 +50,7 @@ export class CustomProvider implements IAnalyticsProvider {
     /**
      * record event
      */
-    public record(event: IEvent) {
+    public record(event: IEvent): void {
         const recordEvent: IRecordEvent = this.generateRecordEvent(event);
 
         this._buffer.putEvent(recordEvent);
@@ -57,7 +60,7 @@ export class CustomProvider implements IAnalyticsProvider {
      * Call custom callback provided
      * @param recordEvent recordEvent returned to customer
      */
-    public async send(recordEvents: IRecordEvent[]) {
+    public async send(recordEvents: IRecordEvent[]): Promise<boolean> {
         return this._customCallback(this._config.path, { events: recordEvents } );
     }
 

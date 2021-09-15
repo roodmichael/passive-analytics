@@ -12,7 +12,7 @@ const defaultClickTrackerConfig: IAnalyticsElementTrackerConfig = {
 };
 
 export class ClickTracker extends BaseTracker implements IAnalyticsTracker {
-    static trackerName: string = 'Click';
+    static trackerName = 'Click';
 
     private _config: IAnalyticsElementTrackerConfig;
 
@@ -21,7 +21,7 @@ export class ClickTracker extends BaseTracker implements IAnalyticsTracker {
         this._config = defaultClickTrackerConfig;
     }
 
-    public configure(config: IAnalyticsElementTrackerConfig) {
+    public configure(config: IAnalyticsElementTrackerConfig): void {
         this._config = config;
     }
 
@@ -53,10 +53,10 @@ export class ClickTracker extends BaseTracker implements IAnalyticsTracker {
             }
         };
         this._record(event);
-    };
+    }
 
     /* local variable for addEventListener and removeEventListener */
-    _trackExecute = (event: Event) => this.trackExecute(event.target as Element);
+    _trackExecute = (event: Event): void => this.trackExecute(event.target as Element);
 
     private track(): void {
         document.querySelector('body').addEventListener('click', this._trackExecute);
@@ -65,4 +65,4 @@ export class ClickTracker extends BaseTracker implements IAnalyticsTracker {
     private untrack(): void {
         document.querySelector('body').removeEventListener('click', this._trackExecute);
     }
-};
+}

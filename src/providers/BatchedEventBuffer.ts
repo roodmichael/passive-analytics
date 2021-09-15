@@ -1,31 +1,31 @@
-
+import { IAnalyticsProvider, IRecordEvent } from '../types';
 import { debounce } from '../lib';
 
 export class BatchedEventBuffer {
-    private _provider;
-    private _batchedEvents = [];
+    private _provider: IAnalyticsProvider;
+    private _batchedEvents: IRecordEvent[] = [];
     private _wait = 1000;
 
-    constructor(provider, params) {
+    constructor(provider: IAnalyticsProvider) {
         this._provider = provider;
 
-        window.addEventListener('beforeunload', (event) => this.sendBatchedEvents());
+        window.addEventListener('beforeunload', () => this.sendBatchedEvents());
     }
 
-    putEvent(event) {
+    putEvent(event: IRecordEvent): void {
         this._batchedEvents.push(event);
         this.debounceSendEvents();
     }
 
-    getBatchedEvents() {
+    getBatchedEvents(): IRecordEvent[] {
         return this._batchedEvents;
     }
 
-    flushEvents() {
+    flushEvents(): void {
         this._batchedEvents = [];
     }
 
-    sendBatchedEvents = () => {
+    sendBatchedEvents = (): void => {
         this._provider.send(this._batchedEvents)
             .then(() => this.flushEvents())
             .catch(() => {/* TODO */} );

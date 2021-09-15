@@ -1,19 +1,29 @@
 import { ConsoleProvider } from '../';
 import { BatchedEventBuffer } from '../BatchedEventBuffer';
 
-import { IAnalyticsProvider } from '../../types';
+import { IAnalyticsProvider, IRecordEvent } from '../../types';
 
-const MOCK_EVENT = new Event('test');
+const MOCK_EVENT: IRecordEvent = {
+    session: 'session123',
+    timestamp: 12345678910,
+    event: {
+        tracker: 'tracker',
+        type: 'type',
+        name: 'name',
+        value: '',
+        detail: ''
+    }
+};
 
 jest.useFakeTimers();
 
 describe('BatchedEventBuffer >', () => {
-    let provider: IAnalyticsProvider = new ConsoleProvider();;
+    const provider: IAnalyticsProvider = new ConsoleProvider();
     let providerSpy;
     let batchedEventBuffer: BatchedEventBuffer;
     beforeEach(() => {
         providerSpy = jest.spyOn(ConsoleProvider.prototype, 'send');
-        batchedEventBuffer = new BatchedEventBuffer(provider, {});
+        batchedEventBuffer = new BatchedEventBuffer(provider);
     });
     test('is defined', () => {
         expect(batchedEventBuffer).toBeDefined();
