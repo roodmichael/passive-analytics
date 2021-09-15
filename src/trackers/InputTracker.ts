@@ -12,7 +12,7 @@ const defaultInputTrackerConfig: IAnalyticsElementTrackerConfig = {
 };
 
 export class InputTracker extends BaseTracker implements IAnalyticsTracker {
-    static trackerName: string = 'Input';
+    static trackerName = 'Input';
 
     private _config: IAnalyticsElementTrackerConfig;
 
@@ -21,7 +21,7 @@ export class InputTracker extends BaseTracker implements IAnalyticsTracker {
         this._config = defaultInputTrackerConfig;
     }
 
-    public configure(config: IAnalyticsElementTrackerConfig) {
+    public configure(config: IAnalyticsElementTrackerConfig): void {
         this._config = config;
     }
 
@@ -54,7 +54,7 @@ export class InputTracker extends BaseTracker implements IAnalyticsTracker {
     }
 
     /* local variable for addEventListener and removeEventListener */
-    _trackExecute = (event: Event) => this.trackExecute(event.target as HTMLInputElement);
+    _trackExecute = (event: Event): void => this.trackExecute(event.target as HTMLInputElement);
 
     private track(): void {
         document.querySelector('body').addEventListener('change', this._trackExecute);
@@ -63,4 +63,4 @@ export class InputTracker extends BaseTracker implements IAnalyticsTracker {
     private untrack(): void {
         document.querySelector('body').removeEventListener('change', this._trackExecute);
     }
-};
+}

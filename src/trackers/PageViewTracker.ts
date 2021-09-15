@@ -1,9 +1,9 @@
 import { BaseTracker } from './BaseTracker';
 
-import { IAnalyticsTracker, IEvent, IRecordEvent } from '../types';
+import { IAnalyticsTracker, IEvent } from '../types';
 
 export class PageViewTracker extends BaseTracker implements IAnalyticsTracker {
-    static trackerName: string = 'PageView';
+    static trackerName = 'PageView';
 
     private _provider;
 
@@ -48,4 +48,4 @@ export class PageViewTracker extends BaseTracker implements IAnalyticsTracker {
 
         this.trackExecute();
     }
-};
+}

@@ -8,10 +8,10 @@ export interface IAnalyticsProvider {
     getSessionId(): string;
 
     // sets session id
-    setSessionId(sessionId: string);
+    setSessionId(sessionId: string): void;
 
     // record events and return true if succeeded
-    record(event: IEvent)
+    record(event: IEvent): void;
 
-    send(events: IRecordEvent[]): Promise<boolean>
-};
+    send(events: IRecordEvent[]): Promise<boolean>;
+}

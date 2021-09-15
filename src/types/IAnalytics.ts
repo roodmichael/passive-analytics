@@ -1,3 +1,3 @@
 export interface IAnalyticsConfig {
-    metadata?: object;
+    metadata?: Record<string, unknown>;
 }

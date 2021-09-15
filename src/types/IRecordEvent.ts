@@ -2,8 +2,8 @@ export type IEvent = {
     tracker: string;
     type: string;
     name: string;
-    value: any;
-    detail: any;
+    value: string | number;
+    detail: string | Record<string, unknown>;
 };
 
 export type IRecordEvent = {

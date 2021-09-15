@@ -1,13 +1,12 @@
 {
   "name": "passive-analytics",
   "version": "0.0.1",
-  "description": "A leightweight analytics framework for websites and applications.",
+  "description": "A lightweight analytics framework for websites and applications.",
   "main": "build/index.js",
   "private": true,
   "scripts": {
-    "lint": "tslint -c tslint.json src/**/*.ts",
+    "lint": "eslint src/**/*.ts",
     "test": "jest",
-    "build": "npm run lint && npm run test && tsc",
     "build:demo": "npm run lint && npm run test && webpack --config webpack.demo.js",
     "build:dist:dev": "npm run lint && npm run test && webpack --config webpack.dev.js",
     "build:dist:prod": "npm run lint && npm run test && webpack --config webpack.prod.js"
@@ -27,18 +26,21 @@
   },
   "homepage": "https://github.com/roodmichael/passive-analytics#readme",
   "devDependencies": {
-    "@types/jest": "^25.1.4",
-    "@types/uuid": "^7.0.2",
-    "jest": "^25.2.3",
-    "terser-webpack-plugin": "^4.1.0",
-    "ts-jest": "^25.2.1",
-    "ts-loader": "^8.0.3",
-    "tslint": "^6.1.0",
-    "typescript": "^3.8.3",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "@types/jest": "^27.0.1",
+    "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/parser": "^4.31.1",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.24.2",
+    "jest": "^27.2.0",
+    "terser-webpack-plugin": "^5.2.4",
+    "ts-jest": "^27.0.5",
+    "ts-loader": "^9.2.5",
+    "typescript": "^4.4.3",
+    "webpack": "^5.52.1",
+    "webpack-cli": "^4.8.0"
   },
   "dependencies": {
-    "uuid": "^7.0.2"
+    "uuid": "^8.3.2"
   }
 }

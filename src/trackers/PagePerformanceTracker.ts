@@ -11,7 +11,7 @@ export const defaultPagePerformanceTrackerConfig: IPagePerformanceTrackerConfig 
 };
 
 export class PagePerformanceTracker extends BaseTracker implements IAnalyticsTracker {
-    static trackerName: string = 'PagePerformance';
+    static trackerName = 'PagePerformance';
 
     private _config: IPagePerformanceTrackerConfig;
 
@@ -72,4 +72,4 @@ export class PagePerformanceTracker extends BaseTracker implements IAnalyticsTra
         });
         observer.observe({ entryTypes: this._config.entryTypeNames });
     }
-};
+}
