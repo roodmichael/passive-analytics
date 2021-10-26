@@ -4,6 +4,8 @@
 
 Passive Analytics is a personal project to explore passive metrics collection patterns that do not pollute the codebase with metrics related code. Because this is a side project, I make no promises and do not recommend using it for any serious purposes.
 
+[Checkout the demo here](https://htmlpreview.github.io/?https://github.com/roodmichael/passive-analytics/blob/master/demo/index.html#page-performance-tracker-section).
+
 ## Purpose
 
 The goal of this project is to eliminate explicit metrics related code from web applications, especially code like click handlers on components, analytics code in React lifecycle methods, and wrappers around your API library.
@@ -41,8 +43,7 @@ import React from 'react';
 
 const ContactForm = () => (
   <form id="contact-form">
-    <button id="submit"
-    >
+    <button id="submit">
       Submit
     </button>
   </form>
