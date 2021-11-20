@@ -4,6 +4,10 @@ export const buildLeafNodeIdentifier = (element: Element, id: string): string =>
         return `${tagName}[@${id}="${element.getAttribute(id)}"]`;
     }
 
+    if (element.id) {
+        return `${tagName}[@id="${element.id}"]`;
+    }
+
     if (element.className) {
         return `${tagName}[@class="${element.className}"]`;
     }
@@ -20,9 +24,11 @@ export const buildConcatenatedIdentifier = (element: Element, id: string, isPare
         return '';
     }
 
-    let identifier = buildLeafNodeIdentifier(element, id);
+    let identifier = '';
     if (isParent) {
-        identifier = element.getAttribute(id) ? `${element.getAttribute(id)}:` : '';
+        identifier = element.hasAttribute(id) ? `${element.getAttribute(id)}:` : '';
+    } else {
+        identifier = element.hasAttribute(id) ? element.getAttribute(id) : buildLeafNodeIdentifier(element, id);
     }
 
     return buildConcatenatedIdentifier(element.parentElement, id, true) + identifier;

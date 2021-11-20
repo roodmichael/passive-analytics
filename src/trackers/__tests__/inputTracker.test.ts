@@ -34,16 +34,23 @@ describe('Input Tracker >', () => {
     test('does nothing if not started', () => {
         expect(recordSpy).toHaveBeenCalledTimes(0);
     });
-    test('records onchange event correct', () => {
+    test('records onchange event correct for default id attribute of "id"', () => {
         tracker.start();
         window.document.getElementById('input-test').dispatchEvent(new window.Event('change', { bubbles: true }));
-        expect(recordSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "input[@id=\"input-test\"]"}));
+        expect(recordSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "input-test"}));
     });
     test('records onchange event to custom id element correctly', () => {
         const initialConfiguration = { idAttribute: 'data-pa-id' };
         tracker.configure(initialConfiguration);
         tracker.start();
         window.document.querySelector('input[data-pa-id="custom-input-test"]').dispatchEvent(new window.Event('change', { bubbles: true }));
-        expect(recordSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "input[@data-pa-id=\"custom-input-test\"]"}));
+        expect(recordSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "custom-input-test"}));
+    });
+    test('records onchange event correct for custom id with no identifier correctly', () => {
+        const initialConfiguration = { idAttribute: 'data-pa-id' };
+        tracker.configure(initialConfiguration);
+        tracker.start();
+        window.document.getElementById('input-test').dispatchEvent(new window.Event('change', { bubbles: true }));
+        expect(recordSpy).toHaveBeenCalledWith(expect.objectContaining({"name": "input[@id=\"input-test\"]"}));
     });
 });
