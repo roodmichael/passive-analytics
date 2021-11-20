@@ -20,9 +20,14 @@ const setupDom = () => {
     parentElement.setAttribute('id', 'parent');
     const childElement = window.document.createElement('h2');
     childElement.setAttribute('id', 'child');
-
     parentElement.append(childElement);
     window.document.body.append(parentElement);
+
+    const emptyParentElement = window.document.createElement('div');
+    const emptyChildElement = window.document.createElement('h2');
+    emptyChildElement.setAttribute('id', 'childnoparent');
+    emptyParentElement.append(emptyChildElement);
+    window.document.body.append(emptyParentElement);
 };
 
 describe('LIBRARY Identifiers', () => {
@@ -67,10 +72,17 @@ describe('LIBRARY Identifiers', () => {
     
             expect(initialResult).toBeFalsy();
         });
-        test('returns concatenated identifier for parent and child', () => {
+        test('returns concatenated identifier for parent and child with identifiers', () => {
             const initialTarget = window.document.getElementById('child');
             const initialResult = buildConcatenatedIdentifier(initialTarget, id);
-            const expectedResult = `parent:h2[@${id}="child"]`;
+            const expectedResult = `parent:child`;
+
+            expect(initialResult).toEqual(expectedResult);
+        });
+        test('returns concatenated identifier for only child when parent has no identifiers', () => {
+            const initialTarget = window.document.getElementById('childnoparent');
+            const initialResult = buildConcatenatedIdentifier(initialTarget, id);
+            const expectedResult = `childnoparent`;
 
             expect(initialResult).toEqual(expectedResult);
         });
