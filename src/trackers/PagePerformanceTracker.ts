@@ -1,13 +1,15 @@
 import { BaseTracker } from './BaseTracker';
+import { pagePerformanceTrackerEntryTypes } from './PagePerformanceTrackerEntries';
 
 import {
     IAnalyticsTracker,
     IPagePerformanceTrackerConfig,
-    IEvent
+    IEvent,
+    SupportedPagePerformanceEntryTypes
 } from '../types';
 
 export const defaultPagePerformanceTrackerConfig: IPagePerformanceTrackerConfig = {
-    entryTypeNames: ['paint']
+    entryTypeNames: [SupportedPagePerformanceEntryTypes.PAINT, SupportedPagePerformanceEntryTypes.RESOURCE]
 };
 
 export class PagePerformanceTracker extends BaseTracker implements IAnalyticsTracker {
@@ -15,14 +17,11 @@ export class PagePerformanceTracker extends BaseTracker implements IAnalyticsTra
 
     private _config: IPagePerformanceTrackerConfig;
 
-    constructor() {
+    constructor(config?: IPagePerformanceTrackerConfig) {
         super();
-        this._config = defaultPagePerformanceTrackerConfig;
+        this._config = config || defaultPagePerformanceTrackerConfig;
     }
 
-    /**
-     * configure page performance tracker
-     */
     public configure(config?: IPagePerformanceTrackerConfig): IPagePerformanceTrackerConfig {
         if (!config) return this._config;
 
@@ -31,41 +30,21 @@ export class PagePerformanceTracker extends BaseTracker implements IAnalyticsTra
         return this._config;
     }
 
-    /**
-     * get tracker name
-     */
     public getTrackerName(): string {
         return PagePerformanceTracker.trackerName;
     }
 
-    /**
-     * starts the tracker
-     */
     public start(): void {
         this.track();
     }
 
-    /**
-     * track page performance metrics
-     */
     private track(): void {
         if (!window.PerformanceObserver) return;
 
         const observer = new PerformanceObserver((list) => {
             list.getEntries().forEach((entry) => {
-                const event: IEvent = {
-                    tracker: this.getTrackerName(),
-                    type: entry.entryType,
-                    name: entry.name,
-                    value: '',
-                    detail: entry.toJSON()
-                };
-
-                if (entry.entryType === 'paint') {
-                    event.value = entry.startTime;
-                } else if (entry.entryType.match(/^(resource|longtask)$/)) {
-                    event.value = entry.duration;
-                }
+                const performanceTrackerEntry = pagePerformanceTrackerEntryTypes[entry.entryType];
+                const event: IEvent = new performanceTrackerEntry(this.getTrackerName(), entry);
 
                 this._record(event);
             });

@@ -16,9 +16,9 @@ export class ClickTracker extends BaseTracker implements IAnalyticsTracker {
 
     private _config: IAnalyticsElementTrackerConfig;
 
-    constructor() {
+    constructor(config?: IAnalyticsElementTrackerConfig) {
         super();
-        this._config = defaultClickTrackerConfig;
+        this._config = config || defaultClickTrackerConfig;
     }
 
     public configure(config: IAnalyticsElementTrackerConfig): void {
