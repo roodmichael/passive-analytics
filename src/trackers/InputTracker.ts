@@ -16,9 +16,9 @@ export class InputTracker extends BaseTracker implements IAnalyticsTracker {
 
     private _config: IAnalyticsElementTrackerConfig;
 
-    constructor() {
+    constructor(config?: IAnalyticsElementTrackerConfig) {
         super();
-        this._config = defaultInputTrackerConfig;
+        this._config = config || defaultInputTrackerConfig;
     }
 
     public configure(config: IAnalyticsElementTrackerConfig): void {
