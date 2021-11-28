@@ -17,6 +17,7 @@
                     <li id="input-tracker-item"><a href="#input-tracker-section">Input Tracker</a></li>
                     <li id="error-tracker-item"><a href="#error-tracker-section">Error Tracker</a></li>
                     <li id="pageview-tracker-item"><a href="#pageview-tracker-section">Pageview Tracker</a></li>
+                    <li id="custom-log-tracker-item"><a href="#custom-log-tracker-section">Custom Log Tracker</a></li>
                 </ul>
             </ul>
         </aside>
@@ -167,6 +168,70 @@
                     </pre>
                 </div>
             </article>
+            <article id="custom-log-tracker-section">
+                <h4>Custom Log Tracker</h4>
+                <p>Log custom events of "info", "warn", or "error" types. The info, warn, and error log methods take a name and value as a parameter. An optional detail string or object can also be supplied to the methods. Click the below buttons and check the development console for example logs. Or in console generate your own logs by typing <code>pa.log.info('name','value','detail');</code>.</p>
+                <button id="custom-log-tracker-info-demo" onclick="pa.log.info('a name', 'a value')">Click here to generate a custom info log</button>
+                <div class="code-example">
+                    <span class="code-toggle" onclick="toggleCodeSection('custom-log-tracker-info-example')">Show/Hide example event</span>
+                    <pre id="custom-log-tracker-info-example" style="display: none;">
+                        <code>
+                        {
+                            event: {
+                                detail: {},
+                                name: "a name",
+                                tracker: "info",
+                                type: "logCustom",
+                                value: "a value"
+                            },
+                            session: "f5bcb6f0-8c96-11ea-a132-eb9711bfbd6d"
+                            timestamp: 1588439131024
+                        }
+                        </code>
+                    </pre>
+                </div>
+                <br />
+                <button id="custom-log-tracker-warn-demo" onclick="pa.log.info('a name', 'a value')">Click here to generate a custom warn log</button>
+                <div class="code-example">
+                    <span class="code-toggle" onclick="toggleCodeSection('custom-log-tracker-warn-example')">Show/Hide example event</span>
+                    <pre id="custom-log-tracker-warn-example" style="display: none;">
+                        <code>
+                        {
+                            event: {
+                                detail: {},
+                                name: "a name",
+                                tracker: "warn",
+                                type: "logCustom",
+                                value: "a value"
+                            },
+                            session: "f5bcb6f0-8c96-11ea-a132-eb9711bfbd6d"
+                            timestamp: 1588439131024
+                        }
+                        </code>
+                    </pre>
+                </div>
+                <br />
+                <button id="custom-log-tracker-error-demo" onclick="pa.log.info('a name', 'a value')">Click here to generate a custom error log</button>
+                <div class="code-example">
+                    <span class="code-toggle" onclick="toggleCodeSection('custom-log-tracker-error-example')">Show/Hide example event</span>
+                    <pre id="custom-log-tracker-error-example" style="display: none;">
+                        <code>
+                        {
+                            event: {
+                                detail: {},
+                                name: "a name",
+                                tracker: "error",
+                                type: "logCustom",
+                                value: "a value"
+                            },
+                            session: "f5bcb6f0-8c96-11ea-a132-eb9711bfbd6d"
+                            timestamp: 1588439131024
+                        }
+                        </code>
+                    </pre>
+                </div>
+                <br />
+            </article>
         </main>
         <script>
             var analytics = new pa.Analytics()
@@ -176,6 +241,7 @@
                 .addTracker(new pa.InputTracker())
                 .addTracker(new pa.ClickTracker())
                 .addTracker(new pa.ErrorTracker())
+                .addTracker(new pa.CustomLogTracker())
                 .start();
         </script>
     </body>
