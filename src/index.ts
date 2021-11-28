@@ -1,12 +1,13 @@
 import Analytics from './Analytics';
 import { ConsoleProvider, CustomProvider } from './providers/';
-import { ClickTracker, ErrorTracker, InputTracker, PageViewTracker, PagePerformanceTracker } from './trackers/';
+import { ClickTracker, CustomLogTracker, ErrorTracker, InputTracker, PageViewTracker, PagePerformanceTracker } from './trackers/';
 
 export {
     Analytics,
     ConsoleProvider,
     CustomProvider,
     ClickTracker,
+    CustomLogTracker,
     ErrorTracker,
     InputTracker,
     PageViewTracker,
@@ -19,6 +20,7 @@ if (window) {
         ConsoleProvider,
         CustomProvider,
         ClickTracker,
+        CustomLogTracker,
         ErrorTracker,
         InputTracker,
         PageViewTracker,
